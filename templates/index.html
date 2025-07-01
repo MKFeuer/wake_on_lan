@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wake-on-LAN Manager</title>
+  <link rel="shortcut icon" href="/static/wol.ico" type="image/x-icon">
+
+  <!-- Lokale Bootstrap CSS -->
+  <link href="/static/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <!-- Lokale Bootstrap Icons -->
+  <link href="/static/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card {
+      border-radius: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-5">
+  <h1 class="mb-4 text-center">
+    <i class="bi bi-lightning-charge-fill text-primary"></i>
+    💻 Wake-on-LAN Manager
+  </h1>
+
+  <!-- Formular zum Hinzufügen -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">Neuen Client hinzufügen</h5>
+      <form id="addForm" class="row g-3 needs-validation" novalidate>
+        <div class="col-md-4">
+          <input type="text" name="name" class="form-control" placeholder="Name" required>
+        </div>
+        <div class="col-md-4">
+          <input type="text" name="mac" class="form-control" placeholder="MAC (XX:XX:XX:XX:XX:XX)" pattern="^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$" required>
+        </div>
+        <div class="col-md-4">
+          <input type="text" name="broadcast" class="form-control" placeholder="Broadcast-IP (z. B. 192.168.1.255)" required>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Hinzufügen
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Clients anzeigen -->
+  <div class="row" id="clientCards">
+    {% for client in clients %}
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card shadow-sm h-100" data-name="{{ client.name }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ client.name }}</h5>
+          <p class="card-text"><strong>MAC:</strong> {{ client.mac }}</p>
+          <p class="card-text"><strong>Broadcast:</strong> {{ client.broadcast }}</p>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+          <button class="btn btn-success btn-sm" onclick="wakeClient('{{ client.name }}')">
+            <i class="bi bi-power"></i> Wecken
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="deleteClient('{{ client.name }}')">
+            <i class="bi bi-trash"></i> Löschen
+          </button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Lokales Bootstrap Bundle (JS + Popper) -->
+<script src="/static/bootstrap/bootstrap.bundle.min.js"></script>
+
+<script>
+// Formular validieren und absenden
+document.getElementById('addForm').onsubmit = async function(e) {
+  e.preventDefault();
+  const form = e.target;
+  if (!form.checkValidity()) {
+    form.classList.add('was-validated');
+    return;
+  }
+
+  const data = {
+    name: form.name.value.trim(),
+    mac: form.mac.value.trim(),
+    broadcast: form.broadcast.value.trim()
+  };
+
+  const res = await fetch('/add', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+
+  if (res.ok) {
+    location.reload();
+  } else {
+    alert("Fehler beim Hinzufügen des Clients.");
+  }
+};
+
+async function deleteClient(name) {
+  if (!confirm(`Client "${name}" wirklich löschen?`)) return;
+  const res = await fetch(`/delete/${name}`, { method: 'DELETE' });
+  if (res.ok) location.reload();
+  else alert("Fehler beim Löschen.");
+}
+
+async function wakeClient(name) {
+  const res = await fetch(`/wake/${name}`, { method: 'POST' });
+  if (res.ok) alert(`Wecksignal an "${name}" gesendet!`);
+  else alert("Fehler beim Senden des Wecksignals.");
+}
+</script>
+
+</body>
+</html>
