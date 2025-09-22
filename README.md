@@ -7,10 +7,10 @@
 
 # WAKE_ON_LAN
 
-<em>Power Devices Instantly, Anywhere, Anytime Effortlessly</em>
+<em>Power Devices Instantly, Effortlessly, Anywhere Anytime</em>
 
 <!-- BADGES -->
-<img src="https://img.shields.io/github/license/MKFeuer/wake_on_lan?style=flat&logo=opensourceinitiative&logoColor=white" alt="license">
+<img src="https://img.shields.io/github/license/MKFeuer/wake_on_lan?style=flat&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
 <img src="https://img.shields.io/github/last-commit/MKFeuer/wake_on_lan?style=flat&logo=git&logoColor=white&color=0080ff" alt="last-commit">
 <img src="https://img.shields.io/github/languages/top/MKFeuer/wake_on_lan?style=flat&color=0080ff" alt="repo-top-language">
 <img src="https://img.shields.io/github/languages/count/MKFeuer/wake_on_lan?style=flat&color=0080ff" alt="repo-language-count">
@@ -46,17 +46,17 @@
 
 ## Overview
 
-Wake_on_lan is a versatile tool designed to streamline remote device management via a user-friendly web interface. It enables network administrators and developers to easily add, delete, and monitor devices, while automating the process of waking them up remotely using Wake-on-LAN magic packets.
+Wake_on_lan is a Flask-based web tool designed to simplify remote management and automation of networked computers. It provides an easy-to-use interface for adding, monitoring, and waking devices via Wake-on-LAN, making device control more accessible and efficient.
 
 **Why wake_on_lan?**
 
-This project simplifies network device control and automation. The core features include:
+This project aims to streamline remote device power management within your network. The core features include:
 
-- 🧩 **🟢 Device Management:** Manage your networked devices through an intuitive web dashboard, with persistent storage for configurations.
-- 🚀 **🟡 Remote Wake-up:** Send reliable Wake-on-LAN magic packets to power on devices across your network effortlessly.
-- 🎨 **🔵 Automated Setup:** Quickly initialize the project with Bootstrap assets for a consistent, professional frontend.
-- 🔧 **🟣 Scalable Architecture:** Designed to support multiple clients and future expansion with organized configuration management.
-- ⚙️ **🟠 Seamless Deployment:** Built with Flask, enabling easy integration into production environments.
+- 🧩 **🎯** Web interface for managing clients: Add, delete, and list devices with ease.
+- 🧰 **🧙** Automated setup: Bootstrap assets ensure a consistent frontend environment.
+- ⚡ **🔌** Wake-on-LAN support: Send magic packets to power on devices remotely.
+- 📁 **📝** Persistent configuration: Store device info in JSON for scalability.
+- 🌐 **🚀** Seamless integration: Fits into both development and production workflows.
 
 ---
 
@@ -64,15 +64,15 @@ This project simplifies network device control and automation. The core features
 
 |      | Component       | Details                                                                                     |
 | :--- | :-------------- | :------------------------------------------------------------------------------------------ |
-| ⚙️  | **Architecture**  | <ul><li>Single Python script for core functionality</li><li>Uses JSON file (`clients.json`) for client data</li><li>Minimal HTML for optional web interface</li></ul> |
-| 🔩 | **Code Quality**  | <ul><li>Concise, procedural Python code</li><li>Limited abstraction; straightforward implementation</li><li>Comments present but minimal</li></ul> |
-| 📄 | **Documentation** | <ul><li>Basic README with project overview</li><li>Usage instructions included</li><li>No formal API docs or inline docstrings observed</li></ul> |
-| 🔌 | **Integrations**  | <ul><li>Relies on external dependencies: `python`, `html`, `markdown`, `clients.json`, `bat` scripts</li><li>Uses batch file (`botstarp.bat`) for setup or automation</li></ul> |
-| 🧩 | **Modularity**    | <ul><li>Monolithic script with limited modular functions</li><li>Client data separated in JSON, enabling some data-driven flexibility</li></ul> |
-| 🧪 | **Testing**       | <ul><li>No formal testing framework detected</li><li>Potential for manual testing via command-line or batch scripts</li></ul> |
-| ⚡️  | **Performance**   | <ul><li>Lightweight; suitable for small networks</li><li>No concurrency or async features; sequential execution</li></ul> |
-| 🛡️ | **Security**      | <ul><li>Basic network packet crafting; minimal security measures</li><li>No encryption or authentication mechanisms</li></ul> |
-| 📦 | **Dependencies**  | <ul><li>Python standard library</li><li>External files: `clients.json`, `markdown`, `html`, `bat` scripts</li></ul> |
+| ⚙️  | **Architecture**  | <ul><li>Single Python script for core functionality</li><li>Uses UDP broadcast for WOL packets</li><li>Command-line interface (CLI) for user interaction</li></ul> |
+| 🔩 | **Code Quality**  | <ul><li>Clear, concise Python code</li><li>Uses standard libraries (socket, argparse)</li><li>Minimal external dependencies</li></ul> |
+| 📄 | **Documentation** | <ul><li>Basic README with usage instructions</li><li>Includes license and dependency info</li></ul> |
+| 🔌 | **Integrations**  | <ul><li>Relies on `requirements.txt` for dependency management</li><li>Supports integration via CLI commands</li></ul> |
+| 🧩 | **Modularity**    | <ul><li>Core functions encapsulated in separate methods</li><li>Minimal modularization; primarily procedural</li></ul> |
+| 🧪 | **Testing**       | <ul><li>No formal test suite detected</li><li>Potential for unit tests on core functions</li></ul> |
+| ⚡️  | **Performance**   | <ul><li>Efficient UDP broadcast for sending magic packets</li><li>Lightweight, suitable for quick WOL requests</li></ul> |
+| 🛡️ | **Security**      | <ul><li>Basic network operations; no encryption or authentication</li><li>Potential risk if exposed on untrusted networks</li></ul> |
+| 📦 | **Dependencies**  | <ul><li>Uses `requirements.txt` for Python dependencies</li><li>Minimal external packages, primarily standard library</li></ul> |
 
 ---
 
@@ -80,12 +80,15 @@ This project simplifies network device control and automation. The core features
 
 ```sh
 └── wake_on_lan/
+    ├── LICENSE.txt
     ├── README.md
     ├── botstarp.bat
     ├── clients.json
+    ├── requirements.txt
     ├── server.py
     ├── templates
     │   └── index.html
+    ├── wake_on_lan.png
     └── wakeonlan.py
 ```
 
@@ -110,23 +113,31 @@ This project simplifies network device control and automation. The core features
 			</thead>
 				<tr style='border-bottom: 1px solid #eee;'>
 					<td style='padding: 8px;'><b><a href='https://github.com/MKFeuer/wake_on_lan/blob/master/server.py'>server.py</a></b></td>
-					<td style='padding: 8px;'>- Provides a web interface for managing and remotely waking networked devices via Wake-on-LAN<br>- Facilitates adding, deleting, and listing client devices, storing configurations persistently, and sending magic packets to power on specified machines<br>- Integrates with Flask for server-side operations and supports deployment with production-ready serving.</td>
+					<td style='padding: 8px;'>- Provides a Flask-based web interface for managing and remotely waking networked computers via Wake-on-LAN<br>- Facilitates adding, deleting, and listing client devices, storing configurations in a JSON file, and enabling users to trigger wake signals through a simple UI<br>- Integrates with production and development environments, supporting seamless device management within the broader network architecture.</td>
 				</tr>
 				<tr style='border-bottom: 1px solid #eee;'>
 					<td style='padding: 8px;'><b><a href='https://github.com/MKFeuer/wake_on_lan/blob/master/clients.json'>clients.json</a></b></td>
-					<td style='padding: 8px;'>- Defines an empty list of client configurations, serving as a placeholder for managing client-specific data within the overall system architecture<br>- It establishes a foundational structure for future client integrations, enabling scalable expansion and customization across the project’s ecosystem<br>- This setup supports organized client management as the project evolves.</td>
+					<td style='padding: 8px;'>- Defines an empty list of client configurations, serving as a foundational data structure for managing client-specific settings within the overall system architecture<br>- It facilitates future expansion to support multiple clients, enabling scalable customization and integration across the applications components<br>- This setup ensures a flexible and organized approach to client management in the project.</td>
 				</tr>
 				<tr style='border-bottom: 1px solid #eee;'>
 					<td style='padding: 8px;'><b><a href='https://github.com/MKFeuer/wake_on_lan/blob/master/botstarp.bat'>botstarp.bat</a></b></td>
-					<td style='padding: 8px;'>- Automates the setup of a Wake-on-LAN project by creating necessary directories and downloading essential Bootstrap 5 and Bootstrap Icons assets<br>- Facilitates quick initialization of the web interfaces styling and frontend resources, ensuring consistent design and functionality across the application<br>- Serves as a foundational script to streamline project deployment and maintainability.</td>
+					<td style='padding: 8px;'>- Automates the setup of the wake_on_lan project by creating necessary directories and downloading essential Bootstrap 5 and Bootstrap Icons assets<br>- Ensures all static resources are locally available, facilitating consistent styling and icon usage across the application<br>- This script streamlines initial project configuration, supporting a reliable and portable frontend environment within the overall architecture.</td>
 				</tr>
 				<tr style='border-bottom: 1px solid #eee;'>
 					<td style='padding: 8px;'><b><a href='https://github.com/MKFeuer/wake_on_lan/blob/master/wakeonlan.py'>wakeonlan.py</a></b></td>
-					<td style='padding: 8px;'>- Facilitates remote device wake-up by sending Wake-on-LAN magic packets over the network<br>- Integrates into the broader architecture to enable automated or manual power-on commands for compatible hardware, supporting network management and device provisioning workflows within the system<br>- Ensures reliable delivery of wake signals through proper packet formatting and broadcast communication.</td>
+					<td style='padding: 8px;'>- Facilitates remote device wake-up by sending Wake-on-LAN magic packets over the network<br>- Integrates into the broader architecture to enable automated or manual power management of networked hardware, ensuring devices can be powered on efficiently without direct physical access<br>- Supports seamless device availability within the systems network management and orchestration workflows.</td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='https://github.com/MKFeuer/wake_on_lan/blob/master/LICENSE.txt'>LICENSE.txt</a></b></td>
+					<td style='padding: 8px;'>- The provided code file, <code>LICENSE.txt</code>, contains the GNU General Public License (GPL) Version 3, which establishes the licensing framework for the entire project<br>- Its primary purpose is to define the legal terms under which the software can be freely used, modified, and distributed<br>- This license ensures that the project remains open and free for all users, promoting collaboration and transparency across the codebase<br>- By embedding this license, the project aligns with principles of free software, safeguarding the rights of users and contributors while supporting the overall architectures goal of fostering an open-source ecosystem.</td>
 				</tr>
 				<tr style='border-bottom: 1px solid #eee;'>
 					<td style='padding: 8px;'><b><a href='https://github.com/MKFeuer/wake_on_lan/blob/master/README.md'>README.md</a></b></td>
-					<td style='padding: 8px;'>- Provides an overview of the wake_on_lan project, emphasizing its role within the broader system architecture<br>- Facilitates remote power management by enabling devices to be awakened over the network, supporting automation and efficient resource control across the infrastructure<br>- Serves as a foundational component for seamless device activation within the overall network management ecosystem.</td>
+					<td style='padding: 8px;'>- Facilitates remote management and automation of networked devices through a web interface by enabling device registration, monitoring, and powering on via Wake-on-LAN magic packets<br>- Integrates core functionalities with persistent configuration storage, supporting scalable device control within the overall network infrastructure<br>- Serves as the central component for orchestrating device wake-up commands in the wake_on_lan system.</td>
+				</tr>
+				<tr style='border-bottom: 1px solid #eee;'>
+					<td style='padding: 8px;'><b><a href='https://github.com/MKFeuer/wake_on_lan/blob/master/requirements.txt'>requirements.txt</a></b></td>
+					<td style='padding: 8px;'>- Defines project dependencies to ensure consistent environment setup across development and deployment<br>- Serves as the foundation for managing external libraries, enabling seamless integration and stability within the overall architecture<br>- Facilitates reproducible builds and dependency management, supporting the robustness and maintainability of the entire codebase.</td>
 				</tr>
 			</table>
 		</blockquote>
@@ -146,7 +157,7 @@ This project simplifies network device control and automation. The core features
 			</thead>
 				<tr style='border-bottom: 1px solid #eee;'>
 					<td style='padding: 8px;'><b><a href='https://github.com/MKFeuer/wake_on_lan/blob/master/templates/index.html'>index.html</a></b></td>
-					<td style='padding: 8px;'>- Provides the user interface for managing Wake-on-LAN clients, enabling addition, deletion, and remote wake-up of devices through an intuitive web dashboard<br>- Integrates form handling and client actions with backend endpoints, facilitating seamless device management within the overall network automation architecture<br>- Enhances user experience by offering real-time control and visual feedback for networked devices.</td>
+					<td style='padding: 8px;'>- Provides the user interface for managing network clients in a Wake-on-LAN environment<br>- Enables adding, viewing, waking, and deleting clients through a web-based dashboard, facilitating easy control of devices via MAC addresses and broadcast IPs<br>- Integrates client data display with interactive controls, supporting seamless network device management within the overall Wake-on-LAN architecture.</td>
 				</tr>
 			</table>
 		</blockquote>
@@ -162,7 +173,7 @@ This project simplifies network device control and automation. The core features
 This project requires the following dependencies:
 
 - **Programming Language:** Python
-- **Package Manager:** Conda
+- **Package Manager:** Pip
 
 ### Installation
 
@@ -182,20 +193,19 @@ Build wake_on_lan from the source and install dependencies:
 
 3. **Install the dependencies:**
 
-**Using [conda](https://docs.conda.io/):**
+**Using [pip](https://pypi.org/project/pip/):**
 
 ```sh
-❯ conda env create -f conda.yml
+❯ pip install -r requirements.txt
 ```
 
 ### Usage
 
 Run the project with:
 
-**Using [conda](https://docs.conda.io/):**
+**Using [pip](https://pypi.org/project/pip/):**
 
 ```sh
-conda activate {venv}
 python {entrypoint}
 ```
 
@@ -203,10 +213,9 @@ python {entrypoint}
 
 Wake_on_lan uses the {__test_framework__} test framework. Run the test suite with:
 
-**Using [conda](https://docs.conda.io/):**
+**Using [pip](https://pypi.org/project/pip/):**
 
 ```sh
-conda activate {venv}
 pytest
 ```
 
